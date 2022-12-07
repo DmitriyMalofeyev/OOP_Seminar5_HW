@@ -12,18 +12,30 @@ public class UserController {
         this.repository = repository;
     }
 
-    public void saveUser(User user) {
+    public void saveUser(User user) throws Exception {
+        validateUserData(user);
         repository.CreateUser(user);
     }
 
     public User readUser(String userId) throws Exception {
-        List<User> users = repository.getAllUsers();
-        for (User user : users) {
-            if (user.getId().equals(userId)) {
-                return user;
-            }
-        }
+        return repository.readUser(userId);
+    }
 
-        throw new Exception("User not found");
+    public List<User> readAllUsers() throws Exception{
+        return repository.getAllUsers();
+    }
+
+    private void validateUserData(User user) {
+        if ((user.getFirstName()).isEmpty() || (user.getLastName()).isEmpty() ||
+                (user.getPhone()).isEmpty()) throw new IllegalStateException("Fields are empty");
+    }
+
+    public User updateUser(User user) throws Exception {
+        return repository.updateUser(user);
+    }
+    public User deleteUser(User user) throws Exception {
+        return repository.deleteUser(user);
+
+
     }
 }
